@@ -10,28 +10,13 @@ import {
   Textarea,
   Checkbox,
 } from "@material-tailwind/react";
-import { FingerPrintIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { PageTitle } from "@/widgets/layout";
-import { FeatureCard, TeamCard } from "@/widgets/cards";
-import { featuresData, teamData, contactData } from "@/data";
-import Heatmap from "../charts/Heatmap";
-import BarChart from "../charts/Barplot";
 import LineChart from "../charts/Linechart"
+import Map from "../charts/Map"
+import Progress from "../charts/ProgressPlot"
+import StackedBar from "../charts/StackedBar"
 
 export function Home() {
-
-  const data = [
-    {"Race":"Asian","Measure Names":"Women","Measure Values":1310},
-    {"Race":"Asian","Measure Names":"Men","Measure Values":1617},
-    {"Race":"Black","Measure Names":"Women","Measure Values":877},
-    {"Race":"Black","Measure Names":"Men","Measure Values":975},
-    {"Race":"Hispanic/Latino","Measure Names":"Women","Measure Values":788},
-    {"Race":"Hispanic/Latino","Measure Names":"Men","Measure Values":892},
-    {"Race":"White","Measure Names":"Women","Measure Values":1016},
-    {"Race":"White","Measure Names":"Men","Measure Values":1201},
-    {"Race":"All","Measure Names":"Women","Measure Values":993},
-    {"Race":"All","Measure Names":"Men","Measure Values":1181}
-  ];
   
 
   return (
@@ -58,43 +43,34 @@ export function Home() {
           </div>
         </div>
       </div>
-      <section className="-mt-32 bg-white px-4 pb-20 pt-4">
-        <div className="container mx-auto">
-          <div className="mt-32 flex flex-wrap items-center">
-            <div className="mx-auto -mt-8 w-full px-4 md:w-5/12">
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-gray-900 p-2 text-center shadow-lg">
-                <FingerPrintIcon className="h-8 w-8 text-white " />
-              </div>
-              <Typography
-                variant="h3"
-                className="mb-3 font-bold"
-                color="blue-gray"
-              >
-                Contents.
-              </Typography>
-              <Typography className="mb-8 font-normal text-blue-gray-500">
-                Contents.
-                <br />
-                <br />
-                Contents. Contents. Contents. Contents. Contents. Contents. Contents. Contents. Contents. Contents. Contents. Contents.
-              </Typography>
-            </div>
-            <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
-              <Card className="shadow-lg border shadow-gray-500/10 rounded-lg">
-                <Heatmap />
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
+
       <section className="px-4 pt-20 pb-48">
         <div className="container mx-auto">
           <PageTitle section="Contents." heading="Contents.">
           Contents.
           </PageTitle>
           
-          <BarChart data={data} />
+          <LineChart />
         
+        </div>
+      </section>
+      <section className="px-4 pt-20 pb-48">
+      <div className="container mx-auto">
+        <PageTitle section="Contents." heading="Contents.">
+        Contents.
+        </PageTitle>
+        
+        <Map />
+      
+      </div>
+    </section>
+      <section className="relative bg-white py-24 px-4">
+        <div className="container mx-auto">
+          <PageTitle section="Contents." heading="Contents.">
+          Contents.Contents.Contents.Contents.Contents.
+          </PageTitle>
+          <Progress />
+          
         </div>
       </section>
       <section className="relative bg-white py-24 px-4">
@@ -102,10 +78,10 @@ export function Home() {
           <PageTitle section="Contents." heading="Contents.">
           Contents.Contents.Contents.Contents.Contents.
           </PageTitle>
-          <LineChart />
-          
-        </div>
-      </section>
+          <StackedBar />
+        
+      </div>
+    </section>
     </>
   );
 }
