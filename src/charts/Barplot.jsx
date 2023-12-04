@@ -1,67 +1,73 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-function BarChart() {
+function GroupedBarChart({ data }) {
+  const ref = useRef();
+
   useEffect(() => {
-    d3.select("#my_dataviz").selectAll("*").remove();
-    // 设置图表的边距和尺寸
-    const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-          width = 460 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom;
+    if (data && data.length) {
+      // Define chart dimensions and margins
+      const width = 960;
+      const height = 500;
+      const margin = { top: 20, right: 30, bottom: 40, left: 90 };
 
-    // 在 div#my_dataviz 中添加 SVG 元素
-    const svg = d3.select("#my_dataviz")
-                  .append("svg")
-                  .attr("width", width + margin.left + margin.right)
-                  .attr("height", height + margin.top + margin.bottom)
-                  .append("g")
-                  .attr("transform", `translate(${margin.left},${margin.top})`);
+      // Select the SVG element and clear it to prevent redrawing issues
+      const svg = d3.select(ref.current);
+      svg.selectAll("*").remove();
 
-    // 模拟数据
-    const data = [
-      { Country: "Country A", Value: 10000 },
-      { Country: "Country B", Value: 12000 },
-      { Country: "Country C", Value: 15000 },
-      { Country: "Country D", Value: 8000 },
-      { Country: "Country E", Value: 7600 },
-      { Country: "Country F", Value: 11000 },
-      { Country: "Country G", Value: 9800 }
-    ];
+      // Define scales
+      const x0 = d3.scaleBand()
+        .domain(data.map(d => d.Race))
+        .rangeRound([margin.left, width - margin.right])
+        .paddingInner(0.1);
 
-    // X 轴
-    const x = d3.scaleBand()
-                .range([ 0, width ])
-                .domain(data.map(d => d.Country))
-                .padding(0.2);
-    svg.append("g")
-       .attr("transform", `translate(0, ${height})`)
-       .call(d3.axisBottom(x))
-       .selectAll("text")
-         .attr("transform", "translate(-10,0)rotate(-45)")
-         .style("text-anchor", "end");
+      const x1 = d3.scaleBand()
+        .domain(['Women', 'Men'])
+        .rangeRound([0, x0.bandwidth()])
+        .padding(0.05);
 
-    // Y 轴
-    const y = d3.scaleLinear()
-                .domain([0, 13000])
-                .range([ height, 0]);
-    svg.append("g")
-       .call(d3.axisLeft(y));
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d['Measure Values'])])
+        .nice()
+        .range([height - margin.bottom, margin.top]);
 
-    // 条形图
-    svg.selectAll("mybar")
-       .data(data)
-       .join("rect")
-         .attr("x", d => x(d.Country))
-         .attr("y", d => y(d.Value))
-         .attr("width", x.bandwidth())
-         .attr("height", d => height - y(d.Value))
-         .attr("fill", "#69b3a2");
+      const color = d3.scaleOrdinal()
+        .domain(['Women', 'Men'])
+        .range(["#ff8c00", "#6b486b"]);
 
-  }, []);
+      // Add bars
+      const raceData = Array.from(
+        d3.group(data, d => d.Race), 
+        ([key, value]) => ({ key, value })
+      );
+
+      raceData.forEach(group => {
+        svg.append("g")
+          .attr("transform", `translate(${x0(group.key)},0)`)
+          .selectAll("rect")
+          .data(group.value)
+          .join("rect")
+            .attr("x", d => x1(d['Measure Names']))
+            .attr("y", d => y(d['Measure Values']))
+            .attr("width", x1.bandwidth())
+            .attr("height", d => y(0) - y(d['Measure Values']))
+            .attr("fill", d => color(d['Measure Names']));
+      });
+
+      // Add axes
+      svg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x0));
+
+      svg.append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
+    }
+  }, [data]);
 
   return (
-    <div id="my_dataviz"></div>
+    <svg ref={ref} width={960} height={500}></svg>
   );
 }
 
-export default BarChart;
+export default GroupedBarChart;

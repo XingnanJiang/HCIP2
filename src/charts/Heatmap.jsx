@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 function Heatmap() {
   useEffect(() => {
 
-    d3.select("#my_dataviz").selectAll("*").remove();
+    d3.select("#heatmap").selectAll("*").remove();
     // 设置图表的边距和尺寸
     const margin = { top: 30, right: 30, bottom: 30, left: 30 },
           width = 450 - margin.left - margin.right,

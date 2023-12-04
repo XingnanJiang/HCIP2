@@ -16,13 +16,23 @@ import { FeatureCard, TeamCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
 import Heatmap from "../charts/Heatmap";
 import BarChart from "../charts/Barplot";
+import LineChart from "../charts/Linechart"
 
 export function Home() {
-  const barChartData = [
-    { id: "chart1" },
-    { id: "chart2" },
-    { id: "chart3" }
+
+  const data = [
+    {"Race":"Asian","Measure Names":"Women","Measure Values":1310},
+    {"Race":"Asian","Measure Names":"Men","Measure Values":1617},
+    {"Race":"Black","Measure Names":"Women","Measure Values":877},
+    {"Race":"Black","Measure Names":"Men","Measure Values":975},
+    {"Race":"Hispanic/Latino","Measure Names":"Women","Measure Values":788},
+    {"Race":"Hispanic/Latino","Measure Names":"Men","Measure Values":892},
+    {"Race":"White","Measure Names":"Women","Measure Values":1016},
+    {"Race":"White","Measure Names":"Men","Measure Values":1201},
+    {"Race":"All","Measure Names":"Women","Measure Values":993},
+    {"Race":"All","Measure Names":"Men","Measure Values":1181}
   ];
+  
 
   return (
     <>
@@ -83,10 +93,7 @@ export function Home() {
           Contents.
           </PageTitle>
           
-          <BarChart />
-          <BarChart />
-          <BarChart />
-
+          <BarChart data={data} />
         
         </div>
       </section>
@@ -95,14 +102,7 @@ export function Home() {
           <PageTitle section="Contents." heading="Contents.">
           Contents.Contents.Contents.Contents.Contents.
           </PageTitle>
-          <div className="mx-auto mt-20 mb-48 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
-            {barChartData.map(({ id }) => (
-              <div key={id}>
-                <BarChart />
-              </div>
-            ))}
-        
-          </div>
+          <LineChart />
           
         </div>
       </section>
